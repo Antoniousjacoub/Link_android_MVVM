@@ -72,11 +72,9 @@ public class Utils {
         }
     }
 
-    public static String parseDate(String oldDateFormat) {
-        if (oldDateFormat == null)
+    public static String parseDate(String oldDateFormat,String inputPattern ,String outputPattern) {
+        if (oldDateFormat == null||inputPattern==null||outputPattern==null)
             return "";
-        String inputPattern = "yyyy-MM-dd";
-        String outputPattern = "MMM dd, yyyy";
         SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern, Locale.ENGLISH);
         SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern, Locale.ENGLISH);
         try {

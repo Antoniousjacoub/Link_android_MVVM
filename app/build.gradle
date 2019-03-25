@@ -23,6 +23,9 @@ android {
     dataBinding {
         enabled = true
     }
+    buildTypes.each {
+        it.buildConfigField 'String', 'API_KEY', API_KEY
+    }
 }
 
 dependencies {
@@ -47,7 +50,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
     //for image circle
     implementation 'de.hdodenhof:circleimageview:2.2.0'

@@ -9,21 +9,22 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
-import com.android.databinding.library.baseAdapters.BR;
+import com.example.linkdevmvvm.BR;
 import com.example.linkdevmvvm.R;
 import com.example.linkdevmvvm.adapters.NewsFeedAdapter;
 import com.example.linkdevmvvm.dataModel.Article;
+import com.example.linkdevmvvm.dataModel.NewsFeedResponse;
 import com.example.linkdevmvvm.databinding.FragmentHomeNewsFeedBinding;
 import com.example.linkdevmvvm.ui.base.BaseFragment;
-import com.example.linkdevmvvm.ui.newsFeedDetails.NewsDetailsFragment;
 import com.example.linkdevmvvm.ui.newsFeedDetails.NewsFeedDetailsActivity;
+import com.example.linkdevmvvm.utils.Constants;
 import com.example.linkdevmvvm.utils.Utils;
 
 
 public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBinding, HomeNewsFeedViewModel> implements NewsFeedAdapter.OnItemNewsClicked {
 
     public static final String TAG = "HomeFragment";
-    FragmentHomeNewsFeedBinding fragmentHomeNewsFeedBinding;
+    private FragmentHomeNewsFeedBinding fragmentHomeNewsFeedBinding;
     private Context context;
     private HomeNewsFeedViewModel homeNewsFeedViewModel;
 
@@ -34,6 +35,12 @@ public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBindi
     @Override
     protected int getBindingVariable() {
         return BR.viewModel;
+    }
+
+    @Override
+    protected void setObservers() {
+        if (homeNewsFeedViewModel == null) return;
+        homeNewsFeedViewModel.getHomeNewsResponse().observe(this, this::onUpdateView);
     }
 
     @Override
@@ -51,34 +58,27 @@ public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBindi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         context = getActivity();
+        homeNewsFeedViewModel = getViewModel();
         fragmentHomeNewsFeedBinding = getViewDataBinding();
-        handleNewsRequest();
+        setObservers();
 
     }
 
-    private void handleNewsRequest() {
-        if (context == null)
+    private void onUpdateView(NewsFeedResponse newsFeedResponse) {
+        Log.e("OnObserverChanged", "OnObserverChanged");
+        if (newsFeedResponse == null || context == null) {
+            Utils.showMessage(context, getString(R.string.no_data_to_show));
             return;
-        homeNewsFeedViewModel = ViewModelProviders.of(this).get(HomeNewsFeedViewModel.class);
-        homeNewsFeedViewModel.getNewsFeed(false);
-        homeNewsFeedViewModel.getHomeNewsResponse().observe(this, newsFeedResponse -> {
-            // Update the UI
-            Log.e("OnObserverChanged", "OnObserverChanged");
-            if (newsFeedResponse == null || context == null) {
-                Utils.showMessage(context, getString(R.string.no_data_to_show));
-                return;
-            }
-            fragmentHomeNewsFeedBinding.rvNewsFeed.setLayoutManager(new LinearLayoutManager(context));
-            NewsFeedAdapter newsFeedAdapter = new NewsFeedAdapter(newsFeedResponse.getArticles(), this);
-            fragmentHomeNewsFeedBinding.rvNewsFeed.setAdapter(newsFeedAdapter);
-        });
+        }
+        fragmentHomeNewsFeedBinding.rvNewsFeed.setLayoutManager(new LinearLayoutManager(context));
+        NewsFeedAdapter newsFeedAdapter = new NewsFeedAdapter(newsFeedResponse.getArticles(), this);
+        fragmentHomeNewsFeedBinding.rvNewsFeed.setAdapter(newsFeedAdapter);
     }
-
 
     @Override
     public void onItemNewsClicked(Article article) {
         Intent intent = new Intent(context, NewsFeedDetailsActivity.class);
-        intent.putExtra(NewsDetailsFragment.ARTICLE_KEY, article);
+        intent.putExtra(Constants.ARTICLE_KEY, article);
         startActivity(intent);
     }
 

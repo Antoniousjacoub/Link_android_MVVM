@@ -11,12 +11,12 @@ import com.example.linkdevmvvm.R;
 import com.example.linkdevmvvm.dataModel.Article;
 import com.example.linkdevmvvm.databinding.FragmentNewsDetailsBinding;
 import com.example.linkdevmvvm.ui.base.BaseFragment;
+import com.example.linkdevmvvm.utils.Constants;
 import com.example.linkdevmvvm.utils.Utils;
 
 public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding, NewsDetailsViewModel> {
 
     public static final String TAG = "NewsDetailsFragmentTag";
-    public static String ARTICLE_KEY = "ARTICLE_KEY";
     private Context context;
     private NewsDetailsViewModel newsDetailsViewModel;
     private FragmentNewsDetailsBinding fragmentNewsDetailsBinding;
@@ -43,6 +43,11 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
     }
 
     @Override
+    protected void setObservers() {
+
+    }
+
+    @Override
     protected int getLayoutId() {
         return R.layout.fragment_news_details;
     }
@@ -59,7 +64,7 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
         fragmentNewsDetailsBinding.tvAuthor.setText(Utils.validString(article.getAuthor()));
         fragmentNewsDetailsBinding.tvNewsFeedTitle.setText(Utils.validString(article.getTitle()));
         fragmentNewsDetailsBinding.tvNewsDetailsDesc.setText(Utils.validString(article.getDescription()));
-        fragmentNewsDetailsBinding.tvDatePublished.setText(Utils.parseDate(article.getPublishedAt()));
+        fragmentNewsDetailsBinding.tvDatePublished.setText(Utils.parseDate(article.getPublishedAt(), Constants.inputPattern,Constants.outputPattern));
         Utils.loadImageWithGlide(context, fragmentNewsDetailsBinding.imgNewsFeedDetails, article.getUrlToImage());
 
 

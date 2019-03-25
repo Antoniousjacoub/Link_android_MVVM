@@ -1,6 +1,7 @@
 package com.example.linkdevmvvm.ui.homeNewsFeed;
 
 import android.os.Bundle;
+import android.view.Menu;
 
 import com.example.linkdevmvvm.R;
 import com.example.linkdevmvvm.ui.base.BaseActivityForDrawer;
@@ -20,6 +21,10 @@ public class HomeNewsFeedActivity extends BaseActivityForDrawer {
         if (savedInstanceState == null)
             addFragment(R.id.container_home, HomeNewsFeedFragment.getInstance(), HomeNewsFeedFragment.TAG);
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
 }

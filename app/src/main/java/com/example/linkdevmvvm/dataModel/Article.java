@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.linkdevmvvm.utils.Constants;
 import com.example.linkdevmvvm.utils.Utils;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -69,7 +70,7 @@ public class Article implements Parcelable {
 
     @BindingAdapter({"dateFormat"})
     public static void dateFormat(TextView textView, String publishedAt) {
-        textView.setText(Utils.parseDate(publishedAt));
+        textView.setText(Utils.parseDate(publishedAt, Constants.inputPattern,Constants.outputPattern));
     }
 
     public String getAuthor() {

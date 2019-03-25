@@ -19,7 +19,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void setToolbar(Toolbar toolbar, String title) {
+    protected void setToolbar(Toolbar toolbar, String title) {
         if (title == null)
             title = "";
 

@@ -17,6 +17,7 @@ public abstract class BaseFragment<D extends ViewDataBinding, M extends BaseView
     private M mViewModel;
 
     protected abstract int getBindingVariable();
+    protected abstract void setObservers();
     protected abstract @LayoutRes int getLayoutId();
     protected abstract M getViewModel();
     public D getViewDataBinding() {

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
+import com.example.linkdevmvvm.BuildConfig;
 import com.example.linkdevmvvm.R;
 import com.example.linkdevmvvm.dataModel.NewsFeedResponse;
 import com.example.linkdevmvvm.ui.base.BaseViewModel;
@@ -24,16 +25,19 @@ import retrofit2.Response;
  */
 public class HomeNewsFeedViewModel extends BaseViewModel {
 
-    private MutableLiveData<NewsFeedResponse> articleList = new MutableLiveData<>();
+    private MutableLiveData<NewsFeedResponse> articleList;
     private Application application;
 
     public HomeNewsFeedViewModel(@NonNull Application application) {
         super(application);
         this.application = application;
+        articleList = new MutableLiveData<>();
+        getNewsFeed(false);
+
     }
 
-    void getNewsFeed(boolean fromSwipeRefresh) {
-        Call<NewsFeedResponse> homeData = getServicesInterface().getNewsFeed(Constants.SOURCE, Constants.API_KEY);
+   private void getNewsFeed(boolean fromSwipeRefresh) {
+        Call<NewsFeedResponse> homeData = getServicesInterface().getNewsFeed(Constants.SOURCE, BuildConfig.API_KEY);
         setCurrentRetrofitCall(homeData);
         if (!fromSwipeRefresh) {
             setIsLoading(true);
