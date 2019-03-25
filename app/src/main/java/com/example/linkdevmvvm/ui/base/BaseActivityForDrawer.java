@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.widget.FrameLayout;
 
 import com.example.linkdevmvvm.R;
@@ -93,8 +92,6 @@ public abstract class BaseActivityForDrawer extends BaseActivity implements Cust
     @Override
     public void onItemSideMenuClicked(int position) {
         drawerLayout.closeDrawers();
-        customDrawerAdapter.setlastSelectedPosition(position);
-
         switch (position) {
             case SideMenuItems.EXPLORE:
                 Utils.showMessage(this, getString(R.string.str_menu_explore));

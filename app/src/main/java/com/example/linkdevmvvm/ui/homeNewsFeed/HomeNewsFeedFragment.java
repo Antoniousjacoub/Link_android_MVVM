@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.example.linkdevmvvm.BR;
 import com.example.linkdevmvvm.R;
+import com.example.linkdevmvvm.ViewModelProviderFactory;
 import com.example.linkdevmvvm.adapters.NewsFeedAdapter;
 import com.example.linkdevmvvm.dataModel.Article;
 import com.example.linkdevmvvm.dataModel.NewsFeedResponse;
@@ -19,6 +20,8 @@ import com.example.linkdevmvvm.ui.base.BaseFragment;
 import com.example.linkdevmvvm.ui.newsFeedDetails.NewsFeedDetailsActivity;
 import com.example.linkdevmvvm.utils.Constants;
 import com.example.linkdevmvvm.utils.Utils;
+
+import java.util.Objects;
 
 
 public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBinding, HomeNewsFeedViewModel> implements NewsFeedAdapter.OnItemNewsClicked {
@@ -50,7 +53,7 @@ public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBindi
 
     @Override
     protected HomeNewsFeedViewModel getViewModel() {
-        homeNewsFeedViewModel = ViewModelProviders.of(this).get(HomeNewsFeedViewModel.class);
+        homeNewsFeedViewModel = ViewModelProviders.of(this, new ViewModelProviderFactory(Objects.requireNonNull(getActivity()).getApplication())).get(HomeNewsFeedViewModel.class);
         return homeNewsFeedViewModel;
     }
 

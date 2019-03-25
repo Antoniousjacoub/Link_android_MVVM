@@ -8,11 +8,14 @@ import android.support.annotation.Nullable;
 
 import com.example.linkdevmvvm.BR;
 import com.example.linkdevmvvm.R;
+import com.example.linkdevmvvm.ViewModelProviderFactory;
 import com.example.linkdevmvvm.dataModel.Article;
 import com.example.linkdevmvvm.databinding.FragmentNewsDetailsBinding;
 import com.example.linkdevmvvm.ui.base.BaseFragment;
 import com.example.linkdevmvvm.utils.Constants;
 import com.example.linkdevmvvm.utils.Utils;
+
+import java.util.Objects;
 
 public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding, NewsDetailsViewModel> {
 
@@ -33,8 +36,7 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
         super.onActivityCreated(savedInstanceState);
         context = getActivity();
         fragmentNewsDetailsBinding = getViewDataBinding();
-        newsDetailsViewModel.handleNewsFeedDetailsData(getArguments());
-        newsDetailsViewModel.getArticleMutableLiveData().observe(this, this::onSetDataOnView);
+        setObservers();
     }
 
     @Override
@@ -44,7 +46,7 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
 
     @Override
     protected void setObservers() {
-
+        newsDetailsViewModel.getArticleMutableLiveData().observe(this, this::onSetDataOnView);
     }
 
     @Override
@@ -54,7 +56,7 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
 
     @Override
     protected NewsDetailsViewModel getViewModel() {
-        newsDetailsViewModel = ViewModelProviders.of(this).get(NewsDetailsViewModel.class);
+        newsDetailsViewModel = ViewModelProviders.of(this, new ViewModelProviderFactory(Objects.requireNonNull(getActivity()).getApplication(), getArguments())).get(NewsDetailsViewModel.class);
         return newsDetailsViewModel;
     }
 
@@ -64,7 +66,7 @@ public class NewsDetailsFragment extends BaseFragment<FragmentNewsDetailsBinding
         fragmentNewsDetailsBinding.tvAuthor.setText(Utils.validString(article.getAuthor()));
         fragmentNewsDetailsBinding.tvNewsFeedTitle.setText(Utils.validString(article.getTitle()));
         fragmentNewsDetailsBinding.tvNewsDetailsDesc.setText(Utils.validString(article.getDescription()));
-        fragmentNewsDetailsBinding.tvDatePublished.setText(Utils.parseDate(article.getPublishedAt(), Constants.inputPattern,Constants.outputPattern));
+        fragmentNewsDetailsBinding.tvDatePublished.setText(Utils.parseDate(article.getPublishedAt(), Constants.inputPattern, Constants.outputPattern));
         Utils.loadImageWithGlide(context, fragmentNewsDetailsBinding.imgNewsFeedDetails, article.getUrlToImage());
 
 

@@ -70,7 +70,7 @@ public class Article implements Parcelable {
 
     @BindingAdapter({"dateFormat"})
     public static void dateFormat(TextView textView, String publishedAt) {
-        textView.setText(Utils.parseDate(publishedAt, Constants.inputPattern,Constants.outputPattern));
+        textView.setText(Utils.parseDate(publishedAt, Constants.inputPattern, Constants.outputPattern));
     }
 
     public String getAuthor() {

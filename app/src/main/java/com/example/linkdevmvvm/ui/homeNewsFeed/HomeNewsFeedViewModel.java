@@ -28,15 +28,14 @@ public class HomeNewsFeedViewModel extends BaseViewModel {
     private MutableLiveData<NewsFeedResponse> articleList;
     private Application application;
 
-    public HomeNewsFeedViewModel(@NonNull Application application) {
-        super(application);
+    public HomeNewsFeedViewModel(Application application) {
         this.application = application;
         articleList = new MutableLiveData<>();
         getNewsFeed(false);
 
     }
 
-   private void getNewsFeed(boolean fromSwipeRefresh) {
+    private void getNewsFeed(boolean fromSwipeRefresh) {
         Call<NewsFeedResponse> homeData = getServicesInterface().getNewsFeed(Constants.SOURCE, BuildConfig.API_KEY);
         setCurrentRetrofitCall(homeData);
         if (!fromSwipeRefresh) {

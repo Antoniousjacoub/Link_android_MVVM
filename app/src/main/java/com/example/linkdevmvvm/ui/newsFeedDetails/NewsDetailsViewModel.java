@@ -16,15 +16,15 @@ import static com.example.linkdevmvvm.utils.Constants.ARTICLE_KEY;
 public class NewsDetailsViewModel extends BaseViewModel {
     private Application application;
 
-    private MutableLiveData<Article> articleMutableLiveData ;
+    private MutableLiveData<Article> articleMutableLiveData;
 
-    public NewsDetailsViewModel(@NonNull Application application) {
-        super(application);
+    public NewsDetailsViewModel(@NonNull Application application, Bundle bundle) {
         this.application = application;
         articleMutableLiveData = new MutableLiveData<>();
+        handleNewsFeedDetailsData(bundle);
     }
 
-    void handleNewsFeedDetailsData(Bundle bundle) {
+    private void handleNewsFeedDetailsData(Bundle bundle) {
         if (bundle == null) {
             Utils.showMessage(application, application.getString(R.string.somthing_went_wrong));
             return;

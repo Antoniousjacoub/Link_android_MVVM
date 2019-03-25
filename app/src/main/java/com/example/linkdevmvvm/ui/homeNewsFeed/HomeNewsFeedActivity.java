@@ -21,6 +21,7 @@ public class HomeNewsFeedActivity extends BaseActivityForDrawer {
         if (savedInstanceState == null)
             addFragment(R.id.container_home, HomeNewsFeedFragment.getInstance(), HomeNewsFeedFragment.TAG);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);

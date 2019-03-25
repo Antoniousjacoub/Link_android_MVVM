@@ -49,14 +49,22 @@ public class CustomDrawerAdapter extends RecyclerView.Adapter<CustomDrawerAdapte
 
         holder.drawerIcon.setImageDrawable(context.getResources().getDrawable(dItem.getImgResID()));
         holder.drawerItemName.setText(dItem.getItemName());
-        holder.itemLayout.setOnClickListener(view -> onItemSideMenuClicked.onItemSideMenuClicked(position));
-
+        holder.itemLayout.setTag(position);
+        holder.itemLayout.setOnClickListener(listener);
         if (position == lastSelectedSideMenuPosition) {
             holder.imageSelectedItem.setImageDrawable(context.getResources().getDrawable(R.drawable.selected));
         } else {
             holder.imageSelectedItem.setImageDrawable(null);
         }
     }
+   private View.OnClickListener listener=new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            onItemSideMenuClicked.onItemSideMenuClicked((int)view.getTag());
+            lastSelectedSideMenuPosition = (int)view.getTag();
+            notifyDataSetChanged();
+        }
+    };
 
     @Override
     public long getItemId(int position) {
@@ -68,10 +76,6 @@ public class CustomDrawerAdapter extends RecyclerView.Adapter<CustomDrawerAdapte
         return drawerItemList.size();
     }
 
-    public void setlastSelectedPosition(int lastSelectedSideMenuPosition) {
-        this.lastSelectedSideMenuPosition = lastSelectedSideMenuPosition;
-        notifyDataSetChanged();
-    }
 
     public interface OnItemSideMenuClicked {
         void onItemSideMenuClicked(int position);

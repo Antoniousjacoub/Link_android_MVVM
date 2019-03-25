@@ -1,9 +1,7 @@
 package com.example.linkdevmvvm.ui.base;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.ViewModel;
 import android.databinding.ObservableBoolean;
-import android.support.annotation.NonNull;
 
 import com.example.linkdevmvvm.App;
 import com.example.linkdevmvvm.service.ServicesInterface;
@@ -12,7 +10,7 @@ import javax.inject.Inject;
 
 import retrofit2.Call;
 
-public abstract class BaseViewModel extends AndroidViewModel {
+public abstract class BaseViewModel extends ViewModel {
 
     private final ObservableBoolean mIsLoading = new ObservableBoolean();
     private final ObservableBoolean mIsRefreshing = new ObservableBoolean();
@@ -21,8 +19,7 @@ public abstract class BaseViewModel extends AndroidViewModel {
     private Call call;
 
 
-    public BaseViewModel(@NonNull Application application) {
-        super(application);
+    protected BaseViewModel() {
         App.getNetComponent().inject(this);
 
     }
