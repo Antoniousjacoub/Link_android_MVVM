@@ -23,7 +23,6 @@ public class ViewModelProviderFactory extends ViewModelProvider.NewInstanceFacto
 
     public ViewModelProviderFactory(Application application) {
         this.application = application;
-
     }
 
     @NonNull

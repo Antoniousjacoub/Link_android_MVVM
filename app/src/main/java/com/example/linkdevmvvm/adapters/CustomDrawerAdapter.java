@@ -29,6 +29,14 @@ public class CustomDrawerAdapter extends RecyclerView.Adapter<CustomDrawerAdapte
     private Context context;
     private List<DrawerItem> drawerItemList;
     private OnItemSideMenuClicked onItemSideMenuClicked;
+    private View.OnClickListener listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            onItemSideMenuClicked.onItemSideMenuClicked((int) view.getTag());
+            lastSelectedSideMenuPosition = (int) view.getTag();
+            notifyDataSetChanged();
+        }
+    };
 
     public CustomDrawerAdapter(Context context, List<DrawerItem> listItems, OnItemSideMenuClicked onItemSideMenuClicked) {
         this.context = context;
@@ -57,14 +65,6 @@ public class CustomDrawerAdapter extends RecyclerView.Adapter<CustomDrawerAdapte
             holder.imageSelectedItem.setImageDrawable(null);
         }
     }
-   private View.OnClickListener listener=new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            onItemSideMenuClicked.onItemSideMenuClicked((int)view.getTag());
-            lastSelectedSideMenuPosition = (int)view.getTag();
-            notifyDataSetChanged();
-        }
-    };
 
     @Override
     public long getItemId(int position) {

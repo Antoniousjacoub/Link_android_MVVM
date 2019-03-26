@@ -11,10 +11,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.linkdevmvvm.R;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import retrofit2.HttpException;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
@@ -87,4 +90,13 @@ public class Utils {
         }
     }
 
+    public static String processError(Application application, Throwable throwable) {
+        if (throwable instanceof HttpException) {
+            return ((HttpException) throwable).message();
+        } else if (throwable instanceof IOException) {
+            return application.getApplicationContext().getString(R.string.error_network);
+        } else {
+            return application.getApplicationContext().getString(R.string.error_communicating_with_server);
+        }
+    }
 }

@@ -24,8 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:onRefreshListener="@{() -> viewModel.onRefresh()}"
-            app:refreshing="@{viewModel.isRefreshing}">
+            app:onRefreshListener="@{() -> viewModel.onRefresh()}">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_news_feed"
@@ -38,7 +37,6 @@
             style="@style/CustomProgressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.53"

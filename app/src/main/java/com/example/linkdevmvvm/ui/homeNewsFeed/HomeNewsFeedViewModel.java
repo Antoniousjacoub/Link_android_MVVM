@@ -2,21 +2,11 @@ package com.example.linkdevmvvm.ui.homeNewsFeed;
 
 import android.app.Application;
 import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
 
-import com.example.linkdevmvvm.BuildConfig;
-import com.example.linkdevmvvm.R;
 import com.example.linkdevmvvm.dataModel.NewsFeedResponse;
+import com.example.linkdevmvvm.repositories.RepositoryNews;
 import com.example.linkdevmvvm.ui.base.BaseViewModel;
-import com.example.linkdevmvvm.utils.Constants;
-import com.example.linkdevmvvm.utils.Utils;
-
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.HttpException;
-import retrofit2.Response;
+import com.example.linkdevmvvm.utils.ResourceState;
 
 ;
 
@@ -25,60 +15,30 @@ import retrofit2.Response;
  */
 public class HomeNewsFeedViewModel extends BaseViewModel {
 
-    private MutableLiveData<NewsFeedResponse> articleList;
-    private Application application;
+    private RepositoryNews repositoryNews;
 
     public HomeNewsFeedViewModel(Application application) {
-        this.application = application;
-        articleList = new MutableLiveData<>();
-        getNewsFeed(false);
-
+        repositoryNews = new RepositoryNews(application);
     }
 
-    private void getNewsFeed(boolean fromSwipeRefresh) {
-        Call<NewsFeedResponse> homeData = getServicesInterface().getNewsFeed(Constants.SOURCE, BuildConfig.API_KEY);
-        setCurrentRetrofitCall(homeData);
-        if (!fromSwipeRefresh) {
-            setIsLoading(true);
-        } else {
-            setIsRefreshing(true);
-        }
-        homeData.enqueue(new Callback<NewsFeedResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<NewsFeedResponse> call, @NonNull final Response<NewsFeedResponse> response) {
-                setIsRefreshing(false);
-                setIsLoading(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    articleList.setValue(response.body());
-                }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<NewsFeedResponse> call, @NonNull Throwable t) {
-                setIsRefreshing(false);
-                setIsLoading(false);
-                processError(t);
-            }
-        });
+    MutableLiveData<ResourceState<NewsFeedResponse>> getHomeNewsResponse() {
+        return repositoryNews.getArticleList();
     }
 
-    MutableLiveData<NewsFeedResponse> getHomeNewsResponse() {
-        return articleList;
+    void fetchHomeNewsFeed() {
+        repositoryNews.getNewsFeed(false);
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+    }
 
     public void onRefresh() {
-        getNewsFeed(true);
+        repositoryNews.getNewsFeed(true);
     }
 
-    private void processError(Throwable throwable) {
-        if (throwable instanceof HttpException) {
-            Utils.showMessage(application.getApplicationContext(), ((HttpException) throwable).message());
-        } else if (throwable instanceof IOException) {
-            Utils.showMessage(application.getApplicationContext(), application.getApplicationContext().getString(R.string.error_network));
-        } else {
-            Utils.showMessage(application.getApplicationContext(), application.getApplicationContext().getString(R.string.error_communicating_with_server));
-        }
-    }
+
 }
 

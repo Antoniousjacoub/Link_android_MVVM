@@ -2,7 +2,7 @@ package com.example.linkdevmvvm.dagger.component;
 
 
 import com.example.linkdevmvvm.dagger.module.NetworkingModule;
-import com.example.linkdevmvvm.ui.base.BaseViewModel;
+import com.example.linkdevmvvm.repositories.RepositoryNews;
 
 import javax.inject.Singleton;
 
@@ -15,5 +15,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = {NetworkingModule.class})
 public interface NetworkingComponent {
-    void inject(BaseViewModel baseViewModel);
+    void inject(RepositoryNews repositoryNews);
 }

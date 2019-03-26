@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 
 import com.example.linkdevmvvm.BR;
 import com.example.linkdevmvvm.R;
@@ -19,6 +20,7 @@ import com.example.linkdevmvvm.databinding.FragmentHomeNewsFeedBinding;
 import com.example.linkdevmvvm.ui.base.BaseFragment;
 import com.example.linkdevmvvm.ui.newsFeedDetails.NewsFeedDetailsActivity;
 import com.example.linkdevmvvm.utils.Constants;
+import com.example.linkdevmvvm.utils.ResourceState;
 import com.example.linkdevmvvm.utils.Utils;
 
 import java.util.Objects;
@@ -43,7 +45,7 @@ public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBindi
     @Override
     protected void setObservers() {
         if (homeNewsFeedViewModel == null) return;
-        homeNewsFeedViewModel.getHomeNewsResponse().observe(this, this::onUpdateView);
+        homeNewsFeedViewModel.getHomeNewsResponse().observe(this, this::processResponse);
     }
 
     @Override
@@ -63,8 +65,16 @@ public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBindi
         context = getActivity();
         homeNewsFeedViewModel = getViewModel();
         fragmentHomeNewsFeedBinding = getViewDataBinding();
+        homeNewsFeedViewModel.fetchHomeNewsFeed();
         setObservers();
 
+    }
+
+    @Override
+    public void onItemNewsClicked(Article article) {
+        Intent intent = new Intent(context, NewsFeedDetailsActivity.class);
+        intent.putExtra(Constants.ARTICLE_KEY, article);
+        startActivity(intent);
     }
 
     private void onUpdateView(NewsFeedResponse newsFeedResponse) {
@@ -73,16 +83,37 @@ public class HomeNewsFeedFragment extends BaseFragment<FragmentHomeNewsFeedBindi
             Utils.showMessage(context, getString(R.string.no_data_to_show));
             return;
         }
+        onLoadingFinish();
         fragmentHomeNewsFeedBinding.rvNewsFeed.setLayoutManager(new LinearLayoutManager(context));
         NewsFeedAdapter newsFeedAdapter = new NewsFeedAdapter(newsFeedResponse.getArticles(), this);
         fragmentHomeNewsFeedBinding.rvNewsFeed.setAdapter(newsFeedAdapter);
     }
 
-    @Override
-    public void onItemNewsClicked(Article article) {
-        Intent intent = new Intent(context, NewsFeedDetailsActivity.class);
-        intent.putExtra(Constants.ARTICLE_KEY, article);
-        startActivity(intent);
+    private void processResponse(ResourceState response) {
+        switch (response.status) {
+            case LOADING:
+                onLoadingStart();
+                break;
+
+            case SUCCESS:
+                onUpdateView((NewsFeedResponse) response.data);
+                break;
+
+            case ERROR:
+                Utils.showMessage(context, response.message);
+                break;
+        }
+    }
+
+    private void onLoadingStart() {
+        fragmentHomeNewsFeedBinding.loadView.setVisibility(View.VISIBLE);
+        fragmentHomeNewsFeedBinding.swipeRefreshLayout.setVisibility(View.GONE);
+    }
+
+    private void onLoadingFinish() {
+        fragmentHomeNewsFeedBinding.loadView.setVisibility(View.GONE);
+        fragmentHomeNewsFeedBinding.swipeRefreshLayout.setVisibility(View.VISIBLE);
+        fragmentHomeNewsFeedBinding.swipeRefreshLayout.setRefreshing(false);
     }
 
 
